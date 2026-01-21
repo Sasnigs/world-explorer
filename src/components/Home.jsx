@@ -11,10 +11,10 @@ export default function Home() {
         }
         getCountries()
     }, [])
-
+    
     return (
         <>
-            <CountryGrid countries={countries} />
+           {countries && <CountryGrid countries={countries} />} 
         </>
     )
 }
