@@ -14,7 +14,7 @@ export default function Home() {
     
     return (
         <>
-            <Search />
+            <Search setCountries={setCountries} />
            {countries && <CountryGrid countries={countries} />} 
         </>
     )

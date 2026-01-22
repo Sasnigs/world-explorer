@@ -1,13 +1,19 @@
 import { useState } from "react";
+import { searchCountry } from "../services/searchCountry";
 
-export default function Search() {
+export default function Search({setCountries}) {
   const [searchValue, setSearchValue] = useState("");
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (!searchValue.trim()) return;
-    setSearchValue("");
-    // implement fnc to call search endpoints
+    try{
+        const res = await searchCountry(searchValue)
+        setCountries(res)
+    }
+    catch(error){
+        console.error("search req failed", error)
+    }
   }
 
   return (
