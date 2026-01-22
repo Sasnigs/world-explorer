@@ -3,7 +3,7 @@ import CountryGrid from "./CountryGrid"
 import { useState, useEffect } from "react"
 import Search from "./Search"
 export default function Home() {
-    const [countries, setCountries] = useState()
+    const [countries, setCountries] = useState([])
     useEffect(() => {
         async function getCountries() {
             const countries = await fetchCountries()
@@ -11,11 +11,15 @@ export default function Home() {
         }
         getCountries()
     }, [])
-    
+
     return (
         <>
             <Search setCountries={setCountries} />
-           {countries && <CountryGrid countries={countries} />} 
+            {countries.length === 0 ? (
+                <div className="py-12 text-center text-gray-500">
+                    No countries found. Try a different search.
+                </div>
+            ) : <CountryGrid countries={countries} />}
         </>
     )
 }
