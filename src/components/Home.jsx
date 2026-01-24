@@ -6,6 +6,7 @@ import Dropdown from "./Dropdown"
 export default function Home() {
     const [countries, setCountries] = useState([])
     const [allCountries, setAllCountries] = useState([]);
+     const [region, setRegion] = useState("All")
     useEffect(() => {
         async function getCountries() {
             const countries = await fetchCountries()
@@ -14,11 +15,21 @@ export default function Home() {
         }
         getCountries()
     }, [])
+    useEffect(()=> {
+        if (region === "All") {
+            setCountries(allCountries);
+            return;
+        }
+        const filtered = allCountries.filter(
+            (country) => country.region === region
+        );
+        setCountries(filtered);
+    },[region, allCountries])
 
     return (
         <>
             <Search setCountries={setCountries} />
-            <Dropdown allCountries={allCountries} setCountries={setCountries} />
+            <Dropdown setRegion={setRegion} region={region} />
             {countries.length === 0 ? (
                 <div className="py-12 text-center text-gray-500">
                     No countries found. Try a different search.
