@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { searchCountry } from "../services/searchCountry";
+import { searchCountryByName } from "../services/searchCountry";
 
 export default function Search({setCountries}) {
   const [searchValue, setSearchValue] = useState("");
@@ -8,7 +8,7 @@ export default function Search({setCountries}) {
     e.preventDefault();
     if (!searchValue.trim()) return;
     try{
-        const res = await searchCountry(searchValue)
+        const res = await searchCountryByName(searchValue)
         setCountries(res)
     }
     catch(error){
