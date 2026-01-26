@@ -1,6 +1,6 @@
-export async function searchCountryByName(countryName) {
+export async function searchCountryByCode(countryCode) {
     try {
-        const res = await fetch(`https://restcountries.com/v3.1/name/${countryName}
+        const res = await fetch(`https://restcountries.com/v3.1/alpha/${countryCode}
 `)
         if (res.status === 404) {
             return []
