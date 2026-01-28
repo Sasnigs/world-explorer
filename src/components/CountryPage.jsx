@@ -1,23 +1,62 @@
 import { useParams, Link } from "react-router-dom";
 import { searchCountryByCode } from "../services/searchCountryByCode";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function CountryPage() {
-  const { cca3 } = useParams();
-  console.log(cca3)
-  let country = []
-  useEffect(() => {
-    async function getCountry() {
-        country = await searchCountryByCode(cca3)
-    }
-    getCountry()
-  },[])
+    const { cca3 } = useParams();
+    const [country, setCountry] = useState(null);
 
-  return (
-    <div>
-      <Link to="/">← Back</Link>
-      <h1>Country: {cca3}</h1>
-      {/* populate with details from getCountry */}
-    </div>
-  );
+    useEffect(() => {
+        async function getCountry() {
+            const data = await searchCountryByCode(cca3);
+            setCountry(data[0]);
+            console.log(data)
+        }
+        getCountry();
+    }, [cca3]);
+
+    if (!country) {
+        return <div>Loading...</div>;
+    }
+
+    return (
+        <div className="w-1/2 mx-auto">
+            <Link to="/">← Back</Link>
+            <h1>Country: {cca3}</h1>
+
+            <div className="grid grid-cols-2 md:grid-cols-[300px_1fr] gap-10 items-start mt-9">
+                <div>
+                    <img
+                        className="w-full rounded-md shadow"
+                        src={country.flags.png}
+                        alt={country.flags.alt}
+                    />
+                </div>
+                <div>
+                    <h1 className="text-5xl font-bold mb-5">{country.name.common}</h1>
+                    <div className="grid grid-cols-1 gap-x-12 gap-y-3 overflow-x-hidden">
+                        <p>
+                            <span className="font-semibold">Native Name:</span>{" "}
+                            {Object.values(country.name.nativeName)[0].official}
+                        </p>
+
+                        <p>
+                            <span className="font-semibold">Population:</span>{" "}
+                            {country.population.toLocaleString()}
+                        </p>
+
+                        <p>
+                            <span className="font-semibold">Region:</span>{" "}
+                            {country.region}
+                        </p>
+
+                        <p>
+                            <span className="font-semibold">Capital:</span>{" "}
+                            {country.capital?.[0]}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 }
