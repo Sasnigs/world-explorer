@@ -6,7 +6,7 @@ import Dropdown from "./Dropdown"
 export default function Home() {
     const [countries, setCountries] = useState([])
     const [allCountries, setAllCountries] = useState([]);
-     const [region, setRegion] = useState("All")
+    const [region, setRegion] = useState("All")
     useEffect(() => {
         async function getCountries() {
             const countries = await fetchCountries()
@@ -15,7 +15,7 @@ export default function Home() {
         }
         getCountries()
     }, [])
-    useEffect(()=> {
+    useEffect(() => {
         if (region === "All") {
             setCountries(allCountries);
             return;
@@ -24,17 +24,24 @@ export default function Home() {
             (country) => country.region === region
         );
         setCountries(filtered);
-    },[region, allCountries])
+    }, [region, allCountries])
 
     return (
         <>
-            <Search setCountries={setCountries} />
-            <Dropdown setRegion={setRegion} region={region} />
-            {countries.length === 0 ? (
-                <div className="py-12 text-center text-gray-500">
-                    No countries found. Try a different search.
+            <div className="max-w-7xl mx-auto">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <Search setCountries={setCountries} />
+                    <Dropdown setRegion={setRegion} region={region} />
                 </div>
-            ) : <CountryGrid countries={countries} />}
+
+                {countries.length === 0 ? (
+                    <div className="py-12 text-center text-gray-500">
+                        No countries found. Try a different search.
+                    </div>
+                ) : (
+                    <CountryGrid countries={countries} />
+                )}
+            </div>
         </>
     )
 }
