@@ -1,19 +1,16 @@
 import { useParams, Link } from "react-router-dom";
 import { searchCountryByCode } from "../services/searchCountryByCode";
 import { useEffect, useState } from "react";
+import BorderCountries from "./BorderCountries";
 
 export default function CountryPage() {
     const { cca3 } = useParams();
     const [country, setCountry] = useState(null);
-
-    useEffect(() => {
-        async function getCountry() {
-            const data = await searchCountryByCode(cca3);
+     async function getCountry(code) {
+            const data = await searchCountryByCode(code);
             setCountry(data[0]);
-            console.log(data)
         }
-        getCountry();
-    }, [cca3]);
+    useEffect(() => { getCountry(cca3); }, [cca3]);
 
     if (!country) {
         return <div>Loading...</div>;
@@ -22,8 +19,6 @@ export default function CountryPage() {
     return (
         <div className="w-1/2 mx-auto">
             <Link to="/">← Back</Link>
-            <h1>Country: {cca3}</h1>
-
             <div className="grid grid-cols-2 md:grid-cols-[300px_1fr] gap-10 items-start mt-9">
                 <div>
                     <img
@@ -57,6 +52,7 @@ export default function CountryPage() {
                     </div>
                 </div>
             </div>
+            <BorderCountries country={country} getCountry={getCountry} />
         </div>
     );
 }
